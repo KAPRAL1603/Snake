@@ -1,0 +1,32 @@
+name: Build Windows EXE
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Compile and build EXE
+        shell: pwsh
+        run: |
+          mkdir build
+          javac -encoding UTF-8 -d build SnakeGame.java GamePanel.java
+          jar --create --file build/Snake.jar --main-class SnakeGame -C build .
+          jpackage --type app-image --name Snake --input build --main-jar Snake.jar --main-class SnakeGame --win-console:$false --dest dist
+
+      - name: Upload ZIP archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: Snake-Windows
+          path: dist/Snake
