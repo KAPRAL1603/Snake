@@ -23,7 +23,7 @@ jobs:
           mkdir build
           javac -encoding UTF-8 -d build SnakeGame.java GamePanel.java
           jar --create --file build/Snake.jar --main-class SnakeGame -C build .
-          jpackage --type app-image --name Snake --input build --main-jar Snake.jar --main-class SnakeGame --win-console:$false --dest dist
+          jpackage --type app-image --name Snake --input build --main-jar Snake.jar --main-class SnakeGame --dest dist
 
       - name: Upload ZIP archive
         uses: actions/upload-artifact@v4
